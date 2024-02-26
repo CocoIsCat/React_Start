@@ -1,10 +1,10 @@
-import React, {Component} from "react";
+import React, {useState} from "react";
 import "./App.css"
 
 //클래스형 컴포넌트
-export default class App extends Component {
+export default function App() {
   
-  btnStyle = {
+  const btnStyle = {
     color: "#fff",
     border: "none",
     padding: "5px 9px",
@@ -13,96 +13,80 @@ export default class App extends Component {
     float: "right",
   }
 
-  getStyle = (completed) => ({
+  const getStyle = (completed) => ({
       padding: "10px",
       borderBottom: "1px #ccc dotted",
       textDecoration: completed ? "line-through" : "none",
   })
 
-  state = {
-    todoData : [
-      {
-        id: "1",
-        title: "공부하기",
-        completed: false,
-      },
-      {
-        id: "2",
-        title: "청소하기",
-        completed: false,
-      },
-    ],
-    value: ""
+  const [todoData, setTodoData] = useState([]);
+  const [value, setValue] = useState("");
+
+  const handleClick = (id) => {
+    let newTodoData = todoData.filter(data => data.id !== id)
+    setTodoData(newTodoData);
   }
 
-  handleClick = (id) => {
-    let newTodoData = this.state.todoData.filter(data => data.id !== id)
-    this.setState({todoData : newTodoData})
-    console.log('newTodoData', newTodoData)
+  const handleChange = (e) => {
+    setValue(e.target.value);
   }
 
-  handleChange = (e) => {
-    this.setState({value : e.target.value})
-    console.log(e.target.value)
-  }
-
-  handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     //form 안에서 입력 버튼을 눌렀을 때 페이지 리로드 방지
     e.preventDefault();
 
     let newTodo = {
       id : Date.now(),
-      title : this.state.value,
+      title : value,
       completed : false,
     };
 
-    this.setState({todoData : [...this.state.todoData, newTodo], value : ""}); 
+    setTodoData(prev => [...prev , newTodo]);
+    setValue("");
   };
   
-  handleCompleteChange = (id) => {
-    let newTodoData = this.state.todoData.map(data => {
+  const handleCompleteChange = (id) => {
+    let newTodoData = todoData.map(data => {
       if (data.id === id) {
         data.completed = !data.completed;
       }
       return data;
     })
-    this.setState({todoDate : newTodoData})
+    setTodoData(newTodoData);
   }
 
-  render() {
-    return (
-      <div className="container">
-        <div className="todoBlock">
-          <div className="title">
-            <h1>할 일 목록</h1>
-          </div>
-          
-          {this.state.todoData.map((data) => (
-            <div style={this.getStyle(data.completed)} key={data.id}>
-            <input type="checkbox" defaultChecked={false} onChange={() => this.handleCompleteChange(data.id)}/>
-            {data.title}
-            <button style={this.btnStyle} onClick={() => this.handleClick(data.id)}>x</button>
-          </div>
-          ))}
-
-
-          <form style={{display:'flex'}} onSubmit={this.handleSubmit}>
-            <input 
-              type="text" 
-              name="value" 
-              style={{flex : '10', padding : '5px'}} 
-              placeholder="해야 할 일을 입력하세요." 
-              value={this.state.value} 
-              onChange={this.handleChange}
-            />
-            <input 
-              type="submit" 
-              value="입력" 
-              style={{flex: '1'}}
-            />
-          </form>
+  return (
+    <div className="container">
+      <div className="todoBlock">
+        <div className="title">
+          <h1>할 일 목록</h1>
         </div>
+        
+        {todoData.map((data) => (
+          <div style={getStyle(data.completed)} key={data.id}>
+          <input type="checkbox" defaultChecked={false} onChange={() => handleCompleteChange(data.id)}/>
+          {data.title}
+          <button style={btnStyle} onClick={() => handleClick(data.id)}>x</button>
+        </div>
+        ))}
+
+
+        <form style={{display:'flex'}} onSubmit={handleSubmit}>
+          <input 
+            type="text" 
+            name="value" 
+            style={{flex : '10', padding : '5px'}} 
+            placeholder="해야 할 일을 입력하세요." 
+            value={value} 
+            onChange={handleChange}
+          />
+          <input 
+            type="submit" 
+            value="입력" 
+            style={{flex: '1'}}
+          />
+        </form>
       </div>
-    )
-  }
+    </div>
+  )
 }
