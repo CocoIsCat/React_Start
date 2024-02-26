@@ -1,17 +1,9 @@
 import React, {useState} from "react";
 import "./App.css"
+import Lists from "./components/Lists";
 
 //클래스형 컴포넌트
 export default function App() {
-  
-  const btnStyle = {
-    color: "#fff",
-    border: "none",
-    padding: "5px 9px",
-    borderRadius: "50%",
-    cursor: "poinder",
-    float: "right",
-  }
 
   const getStyle = (completed) => ({
       padding: "10px",
@@ -61,14 +53,8 @@ export default function App() {
         <div className="title">
           <h1>할 일 목록</h1>
         </div>
-        
-        {todoData.map((data) => (
-          <div style={getStyle(data.completed)} key={data.id}>
-          <input type="checkbox" defaultChecked={false} onChange={() => handleCompleteChange(data.id)}/>
-          {data.title}
-          <button style={btnStyle} onClick={() => handleClick(data.id)}>x</button>
+          <Lists todoData = {todoData}/>
         </div>
-        ))}
 
 
         <form style={{display:'flex'}} onSubmit={handleSubmit}>
@@ -87,6 +73,5 @@ export default function App() {
           />
         </form>
       </div>
-    </div>
   )
 }
