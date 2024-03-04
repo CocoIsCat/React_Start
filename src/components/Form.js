@@ -8,8 +8,10 @@ export default function Form({handleSubmit, value, setValue}) {
     
 
   return (
-    <form style={{display:'flex'}} onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}
+    className="flex pt-2">
         <input 
+        className="w-full px-3 py-2 mr-4 text-gray-500 border rounded shadow"
         type="text" 
         name="value" 
         style={{flex : '10', padding : '5px'}} 
@@ -17,7 +19,8 @@ export default function Form({handleSubmit, value, setValue}) {
         value={value} 
         onChange={handleChange}
         />
-        <input 
+        <input
+        className="p-2 text-blue-400 border-2 border-blue-400 rounded hover:text-white hover:bg-blue-50"
         type="submit" 
         value="입력" 
         style={{flex: '1'}}
